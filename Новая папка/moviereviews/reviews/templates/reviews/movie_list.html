@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог фильмов</title>
+    <style>
+        body {
+            background: #111;
+            color: white;
+            font-family: Arial;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background: #1b1b1b;
+            padding: 10px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.04);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        a {
+            color: #4fc3f7;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 style="text-align:center;">Каталог фильмов</h1>
+
+    <div class="grid">
+        {% for movie in movies %}
+        <div class="card">
+            <img src="{{ movie.image }}" alt="{{ movie.title }}">
+
+            <h3>{{ movie.title }} ({{ movie.year }})</h3>
+
+            <p>
+                <strong>Жанры:</strong>
+                {% for g in movie.genres.all %}
+                {{ g.name }}{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+
+            <a href="{% url 'movie_detail' movie.id %}">
+                Подробнее →
+            </a>
+        </div>
+        {% empty %}
+        <p style="text-align:center;">Фильмы отсутствуют.</p>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,95 @@
+{% extends 'reviews/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .detail-container {
+        background: #fff;
+        padding: 25px;
+        border-radius: 10px;
+        color: #000;
+        max-width: 900px;
+        margin: 20px auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .detail-top {
+        display: flex;
+        gap: 25px;
+    }
+
+    .detail-top img {
+        width: 260px;
+        height: 380px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .detail-info h1 {
+        margin-top: 0;
+    }
+
+    .reviews {
+        margin-top: 30px;
+    }
+
+    textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #aaa;
+    }
+
+    button {
+        margin-top: 10px;
+        background: #e50914;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="detail-container">
+
+    <div class="detail-top">
+        <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+
+        <div class="detail-info">
+            <h1>{{ movie.title }}</h1>
+            <p><b>Год:</b> {{ movie.year }}</p>
+            <p><b>Жанр:</b> {{ movie.genre }}</p>
+            <p><b>Описание:</b></p>
+            <p>{{ movie.description }}</p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ОТЗЫВЫ -->
+    <div class="reviews">
+        <h2>Отзывы</h2>
+
+        {% for review in movie.reviews.all %}
+        <div style="margin-bottom: 15px;">
+            <b>{{ review.user }}</b>: {{ review.text }}
+        </div>
+        {% empty %}
+        <p>Пока отзывов нет.</p>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <!-- ФОРМА ДОБАВЛЕНИЯ ОТЗЫВА -->
+    <h2>Добавить отзыв</h2>
+    <form method="post">
+        {% csrf_token %}
+        <textarea name="text" rows="4" placeholder="Ваш отзыв..."></textarea>
+        <button>Отправить</button>
+    </form>
+
+</div>
+
+{% endblock %}

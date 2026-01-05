@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог фильмов</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <h1>Каталог фильмов</h1>
+
+    <form method="get" class="filters">
+
+        <!-- ЖАНР -->
+        <select name="genre">
+            <option value="">Все жанры</option>
+            {% for genre in genres %}
+            <option value="{{ genre.id }}">
+                {{ genre.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <!-- СОРТИРОВКА -->
+        <select name="sort">
+            <option value="">По дате</option>
+            <option value="rating">По рейтингу</option>
+            <option value="year">По году</option>
+        </select>
+
+        <button type="submit">Применить</button>
+    </form>
+
+    <hr>
+
+    <div class="films-container">
+        {% for film in films %}
+        <div class="film-card">
+
+            {% if film.poster %}
+            <img src="{{ film.poster.url }}" class="poster">
+            {% else %}
+            <img src="{% static 'img/placeholder.png' %}" class="poster">
+            {% endif %}
+
+            <h3>{{ film.title }}</h3>
+
+            <p>{{ film.year }}</p>
+
+            <p>Рейтинг: {{ film.rating }}</p>
+
+            <p>{{ film.description|truncatewords:20 }}</p>
+
+            <a href="{% url 'film_detail' film.id %}">Подробнее</a>
+        </div>
+        {% empty %}
+        <p>Фильмы не добавлены</p>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

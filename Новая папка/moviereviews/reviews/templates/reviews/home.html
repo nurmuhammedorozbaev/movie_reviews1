@@ -1,0 +1,78 @@
+{% extends 'reviews/base.html' %}
+{% load static %}
+
+{% block title %}Главная - Movie Reviews{% endblock %}
+
+{% block content %}
+<style>
+    .movies-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: flex-start;
+    }
+
+    .movie-card {
+        width: 200px;
+        background-color: #1f1f1f;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .movie-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    }
+
+    .movie-card img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+    }
+
+    .movie-info {
+        padding: 10px;
+        color: #fff;
+        text-align: center;
+    }
+
+    .movie-title {
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .movie-genre,
+    .movie-year,
+    .movie-rating {
+        font-size: 14px;
+        color: #ccc;
+    }
+</style>
+
+<h1>Добро пожаловать в Movie Reviews!</h1>
+
+<div class="movies-grid">
+    {% for film in films %}
+    <div class="movie-card">
+        <a href="{% url 'film_detail' film.id %}">
+            <img src="{% if film.poster %}{{ film.poster.url }}{% else %}{% static 'img/placeholder.png' %}{% endif %}"
+                alt="{{ film.title }}">
+        </a>
+        <div class="movie-info">
+            <div class="movie-title">{{ film.title }}</div>
+            <div class="movie-genre">
+                Жанр: {% if film.genre %}{{ film.genre.name }}{% else %}Без жанра{% endif %}
+            </div>
+            <div class="movie-year">Год: {{ film.year }}</div>
+            <div class="movie-rating">Рейтинг: {{ film.rating }}</div>
+        </div>
+    </div>
+    {% empty %}
+    <p>Фильмы пока не добавлены.</p>
+    {% endfor %}
+</div>
+{% endblock %}

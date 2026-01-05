@@ -1,0 +1,331 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ film.title }}</title>
+
+    <style>
+        /* ===== ОСНОВА ===== */
+        body {
+            margin: 0;
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background: #141414;
+            color: #fff;
+        }
+
+        a {
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        /* ===== КОНТЕЙНЕР ===== */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        /* ===== HEADER ФИЛЬМА ===== */
+        .film-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .poster {
+            width: 260px;
+            height: 390px;
+            object-fit: cover;
+            border-radius: 6px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+        }
+
+        .film-info h1 {
+            font-size: 36px;
+            margin: 0 0 10px;
+        }
+
+        .meta {
+            color: #aaa;
+            margin-bottom: 15px;
+        }
+
+        .meta span {
+            margin-right: 15px;
+        }
+
+        .description {
+            max-width: 700px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        /* ===== КНОПКИ ===== */
+        .actions {
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .btn-play {
+            background: #e50914;
+            color: #fff;
+        }
+
+        .btn-play:hover {
+            background: #f6121d;
+        }
+
+        .btn-add {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        /* ===== ПЛЕЕР ===== */
+        .player-container {
+            margin: 40px auto;
+            max-width: 900px;
+        }
+
+        video {
+            width: 100%;
+            border-radius: 8px;
+            background: #000;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        /* ===== СОЦСЕТИ ===== */
+        .share-box {
+            margin: 25px auto;
+            max-width: 900px;
+            padding: 15px;
+            background: #181818;
+            border-radius: 6px;
+        }
+
+        .share-title {
+            margin-bottom: 10px;
+            color: #bbb;
+        }
+
+        .share-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            margin-right: 8px;
+            font-size: 13px;
+            color: #fff;
+            transition: 0.2s;
+        }
+
+        .share-vk {
+            background: #4c75a3;
+        }
+
+        .share-ok {
+            background: #f7931e;
+        }
+
+        .share-tg {
+            background: #0088cc;
+        }
+
+        .share-wa {
+            background: #25d366;
+        }
+
+        .share-tw {
+            background: #1da1f2;
+        }
+
+        .share-links a:hover {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+
+        /* ===== ОТЗЫВЫ ===== */
+        .reviews {
+            margin-top: 40px;
+        }
+
+        .reviews h2 {
+            margin-bottom: 20px;
+        }
+
+        .review-card {
+            background: #181818;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #aaa;
+            margin-bottom: 8px;
+        }
+
+        .review-text {
+            color: #ddd;
+        }
+
+        .delete-btn {
+            margin-top: 8px;
+            background: none;
+            border: 1px solid #555;
+            color: #aaa;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            border-color: #e50914;
+            color: #e50914;
+        }
+/* ===== ФОРМА ===== */
+.review-form textarea,
+.review-form input {
+width: 100%;
+margin-top: 10px;
+padding: 10px;
+border-radius: 4px;
+border: none;
+background: #222;
+color: #fff;
+}
+
+.review-form button {
+margin-top: 10px;
+background: #e50914;
+color: #fff;
+border: none;
+padding: 10px 18px;
+border-radius: 4px;
+font-weight: bold;
+cursor: pointer;
+}
+
+.review-form button:hover {
+background: #f6121d;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 768px) {
+.film-header {
+flex-direction: column;
+align-items: center;
+text-align: center;
+}
+
+.poster {
+width: 200px;
+height: 300px;
+}
+}
+</style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- ===== ФИЛЬМ ===== -->
+        <div class="film-header">
+            <img src="{{ film.poster.url }}" class="poster">
+
+            <div class="film-info">
+                <h1>{{ film.title }}</h1>
+
+                <div class="meta">
+                    <span>{{ film.year }}</span>
+                    <span>{{ film.genre.name }}</span>
+                    <span>⭐ {{ film.rating|default:0 }}</span>
+                </div>
+
+                <div class="description">
+                    {{ film.description }}
+                </div>
+
+        <!-- ===== ПЛЕЕР ===== -->
+        {% if film.video_file %}
+        <div class="player-container">
+            <video controls>
+                <source src="{{ film.video_file.url }}" type="video/mp4">
+            </video>
+        </div>
+        {% endif %}
+
+        <!-- ===== СОЦСЕТИ ===== -->
+        <div class="share-box">
+            <div class="share-title">Поделиться</div>
+            <div class="share-links">
+                <a class="share-vk" href="https://vk.com/share.php?url={{ request.build_absolute_uri }}"
+                    target="_blank">VK</a>
+                <a class="share-ok" href="https://connect.ok.ru/offer?url={{ request.build_absolute_uri }}"
+                    target="_blank">OK</a>
+                <a class="share-tg" href="https://t.me/share/url?url={{ request.build_absolute_uri }}"
+                    target="_blank">TG</a>
+                <a class="share-wa" href="https://wa.me/?text={{ request.build_absolute_uri }}" target="_blank">WA</a>
+                <a class="share-tw" href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}"
+                    target="_blank">X</a>
+            </div>
+        </div>
+
+        <!-- ===== ОТЗЫВЫ ===== -->
+        <div class="reviews">
+            <h2>Отзывы</h2>
+
+            {% for review in reviews %}
+            <div class="review-card">
+                <div class="review-top">
+                    <span>{{ review.author.username }}</span>
+                    <span>⭐ {{ review.rating }}</span>
+                </div>
+                <div class="review-text">{{ review.text }}</div>
+
+                {% if review.author == user %}
+                <form method="post" action="{% url 'delete_review' review.id %}">
+                    {% csrf_token %}
+                    <button class="delete-btn">Удалить</button>
+                </form>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p style="color:#777">Пока отзывов нет</p>
+            {% endfor %}
+        </div>
+
+        <!-- ===== ДОБАВИТЬ ОТЗЫВ ===== -->
+        {% if user.is_authenticated %}
+        <div class="review-form">
+            <form method="post" action="{% url 'add_review' film.id %}">
+                {% csrf_token %}
+                <textarea name="text" placeholder="Ваш отзыв" required></textarea>
+<input type="number" name="rating" min="1" max="10" placeholder="Оценка (1–10)" required>
+<button type="submit">Добавить отзыв</button>
+</form>
+</div>
+{% else %}
+<p><a href="{% url 'login' %}">Войдите</a>, чтобы оставить отзыв</p>
+{% endif %}
+
+</div>
+
+</body>
+
+</html>
